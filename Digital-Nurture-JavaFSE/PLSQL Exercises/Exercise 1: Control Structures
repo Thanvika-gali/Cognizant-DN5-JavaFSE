@@ -1,0 +1,222 @@
+PROJECT STRUCTURE
+
+Exercise 1 Control Structures
+│
+├── 01_SchemaSetup.sql
+├── 02_SampleData.sql
+├── 03_Scenario1_SeniorCitizenBenefit.sql
+├── 04_Scenario2_VIPIdentification.sql
+└── 05_Scenario3_LoanRepaymentReminder.sql
+
+01_SchemaSetup.sql
+CREATE TABLE Customers (
+    CustomerID NUMBER PRIMARY KEY,
+    Name VARCHAR2(100),
+    DOB DATE,
+    Balance NUMBER,
+    LastModified DATE,
+    IsVIP VARCHAR2(5)
+);
+
+CREATE TABLE Accounts (
+    AccountID NUMBER PRIMARY KEY,
+    CustomerID NUMBER,
+    AccountType VARCHAR2(20),
+    Balance NUMBER,
+    LastModified DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+CREATE TABLE Loans (
+    LoanID NUMBER PRIMARY KEY,
+    CustomerID NUMBER,
+    LoanAmount NUMBER,
+    InterestRate NUMBER,
+    StartDate DATE,
+    EndDate DATE,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+02_SampleData.sql
+INSERT INTO Customers
+VALUES (1,'John Doe',TO_DATE('1955-05-15','YYYY-MM-DD'),5000,SYSDATE,'FALSE');
+
+INSERT INTO Customers
+VALUES (2,'Jane Smith',TO_DATE('1990-07-20','YYYY-MM-DD'),15000,SYSDATE,'FALSE');
+
+INSERT INTO Customers
+VALUES (3,'Robert Brown',TO_DATE('1948-03-10','YYYY-MM-DD'),12000,SYSDATE,'FALSE');
+
+INSERT INTO Customers
+VALUES (4,'Emily Davis',TO_DATE('1975-11-25','YYYY-MM-DD'),8000,SYSDATE,'FALSE');
+
+INSERT INTO Loans
+VALUES (1,1,5000,5,SYSDATE,ADD_MONTHS(SYSDATE,60));
+
+INSERT INTO Loans
+VALUES (2,2,10000,6,SYSDATE,ADD_MONTHS(SYSDATE,48));
+
+INSERT INTO Loans
+VALUES (3,3,8000,4.5,SYSDATE,ADD_MONTHS(SYSDATE,36));
+
+INSERT INTO Loans
+VALUES (4,4,15000,5.5,SYSDATE,ADD_MONTHS(SYSDATE,24));
+
+INSERT INTO Loans
+VALUES (5,1,3000,3.5,SYSDATE,SYSDATE+15);
+
+INSERT INTO Loans
+VALUES (6,2,7000,4,SYSDATE,SYSDATE+25);
+
+COMMIT;
+
+03_Scenario1_SeniorCitizenBenefit.sql
+SET SERVEROUTPUT ON;
+
+DECLARE
+
+    CURSOR customer_cursor IS
+        SELECT CustomerID, Name, DOB
+        FROM Customers;
+
+    v_customer_id Customers.CustomerID%TYPE;
+    v_customer_name Customers.Name%TYPE;
+    v_dob Customers.DOB%TYPE;
+    v_age NUMBER;
+
+BEGIN
+
+    OPEN customer_cursor;
+
+    LOOP
+
+        FETCH customer_cursor
+        INTO v_customer_id, v_customer_name, v_dob;
+
+        EXIT WHEN customer_cursor%NOTFOUND;
+
+        v_age := TRUNC(MONTHS_BETWEEN(SYSDATE,v_dob)/12);
+
+        IF v_age >= 60 THEN
+
+            UPDATE Loans
+            SET InterestRate = InterestRate - 1
+            WHERE CustomerID = v_customer_id;
+
+            DBMS_OUTPUT.PUT_LINE(
+                'Interest rate reduced for '
+                || v_customer_name
+            );
+
+        END IF;
+
+    END LOOP;
+
+    CLOSE customer_cursor;
+
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE('Senior citizen benefit applied.');
+
+END;
+
+
+04_Scenario2_VIPIdentification.sql
+SET SERVEROUTPUT ON;
+
+DECLARE
+
+    CURSOR vip_cursor IS
+        SELECT CustomerID, Name, Balance
+        FROM Customers;
+
+    v_id Customers.CustomerID%TYPE;
+    v_name Customers.Name%TYPE;
+    v_balance Customers.Balance%TYPE;
+
+BEGIN
+
+    OPEN vip_cursor;
+
+    LOOP
+
+        FETCH vip_cursor
+        INTO v_id, v_name, v_balance;
+
+        EXIT WHEN vip_cursor%NOTFOUND;
+
+        IF v_balance > 10000 THEN
+
+            UPDATE Customers
+            SET IsVIP='TRUE'
+            WHERE CustomerID=v_id;
+
+            DBMS_OUTPUT.PUT_LINE(
+                v_name || ' marked as VIP.'
+            );
+
+        ELSE
+
+            UPDATE Customers
+            SET IsVIP='FALSE'
+            WHERE CustomerID=v_id;
+
+        END IF;
+
+    END LOOP;
+
+    CLOSE vip_cursor;
+
+    COMMIT;
+
+    DBMS_OUTPUT.PUT_LINE('VIP status verification completed.');
+
+END;
+
+05_Scenario3_LoanRepaymentReminder.sql
+SET SERVEROUTPUT ON;
+
+DECLARE
+
+    CURSOR reminder_cursor IS
+        SELECT
+            c.Name,
+            l.LoanID,
+            l.EndDate
+        FROM Customers c
+        JOIN Loans l
+        ON c.CustomerID = l.CustomerID
+        WHERE l.EndDate BETWEEN SYSDATE AND SYSDATE + 30;
+
+    v_name Customers.Name%TYPE;
+    v_loan_id Loans.LoanID%TYPE;
+    v_due_date Loans.EndDate%TYPE;
+
+BEGIN
+
+    OPEN reminder_cursor;
+
+    LOOP
+
+        FETCH reminder_cursor
+        INTO v_name, v_loan_id, v_due_date;
+
+        EXIT WHEN reminder_cursor%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE(
+            'Reminder -> Customer: '
+            || v_name
+            || ', Loan ID: '
+            || v_loan_id
+            || ', Due Date: '
+            || TO_CHAR(v_due_date,'DD-MON-YYYY')
+        );
+
+    END LOOP;
+
+    CLOSE reminder_cursor;
+
+    DBMS_OUTPUT.PUT_LINE('Reminder process completed.');
+
+END;
+/
