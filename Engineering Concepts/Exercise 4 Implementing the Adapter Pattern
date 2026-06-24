@@ -1,0 +1,76 @@
+PROJECT STRUCTURE
+
+Exercise 4 Implementing the Adapter Pattern
+│
+├── PaymentProcessor.java
+├── PayPalGateway.java
+├── StripeGateway.java
+├── PayPalAdapter.java
+├── StripeAdapter.java
+└── AdapterTest.java
+
+PaymentProcessor.java
+public interface PaymentProcessor {
+    void processPayment(double amount);
+}
+PayPalGateway.java
+public class PayPalGateway {
+
+    public void makePayment(double amount) {
+        System.out.println("Payment of Rs." + amount + " processed through PayPal.");
+    }
+}
+
+StripeGateway.java
+public class StripeGateway {
+
+    public void payAmount(double amount) {
+        System.out.println("Payment of Rs." + amount + " processed through Stripe.");
+    }
+}
+
+PayPalAdapter.java
+public class PayPalAdapter implements PaymentProcessor {
+
+    private PayPalGateway payPalGateway;
+
+    public PayPalAdapter(PayPalGateway payPalGateway) {
+        this.payPalGateway = payPalGateway;
+    }
+
+    @Override
+    public void processPayment(double amount) {
+        payPalGateway.makePayment(amount);
+    }
+}
+
+StripeAdapter.java
+public class StripeAdapter implements PaymentProcessor {
+
+    private StripeGateway stripeGateway;
+
+    public StripeAdapter(StripeGateway stripeGateway) {
+        this.stripeGateway = stripeGateway;
+    }
+
+    @Override
+    public void processPayment(double amount) {
+        stripeGateway.payAmount(amount);
+    }
+}
+
+AdapterTest.java
+public class AdapterTest {
+
+    public static void main(String[] args) {
+
+        PaymentProcessor paypal =
+                new PayPalAdapter(new PayPalGateway());
+
+        PaymentProcessor stripe =
+                new StripeAdapter(new StripeGateway());
+
+        paypal.processPayment(1500);
+        stripe.processPayment(2500);
+    }
+}
