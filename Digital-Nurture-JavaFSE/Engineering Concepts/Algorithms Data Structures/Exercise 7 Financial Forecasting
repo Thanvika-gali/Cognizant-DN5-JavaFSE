@@ -1,0 +1,48 @@
+PROJECT STRUCTURE
+
+Exercise 7 Financial Forecasting
+│
+├── FinancialForecast.java
+└── ForecastTest.java
+
+FinancialForecast.java
+public class FinancialForecast {
+    public static double calculateFutureValue(double currentValue,
+                                              double growthRate,
+                                              int years) {
+
+        if (years == 0) {
+            return currentValue;
+        }
+
+        return calculateFutureValue(
+                currentValue * (1 + growthRate),
+                growthRate,
+                years - 1
+        );
+    }
+}
+
+ForecastTest.java
+public class ForecastTest {
+
+    public static void main(String[] args) {
+
+        double initialInvestment = 10000;
+        double annualGrowthRate = 0.08;
+        int forecastYears = 5;
+
+        double predictedValue =
+                FinancialForecast.calculateFutureValue(
+                        initialInvestment,
+                        annualGrowthRate,
+                        forecastYears);
+
+        System.out.println("Financial Forecast");
+        System.out.println("------------------------------");
+        System.out.println("Initial Investment : ₹" + initialInvestment);
+        System.out.println("Growth Rate        : " + (annualGrowthRate * 100) + "%");
+        System.out.println("Forecast Years     : " + forecastYears);
+        System.out.printf("Predicted Value    : ₹%.2f%n", predictedValue);
+    }
+}
