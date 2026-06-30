@@ -1,0 +1,67 @@
+Project Structure
+JUnit Testing
+│
+└── Exercise 3 Assertions in JUnit
+    ├── pom.xml
+    └── src
+        └── test
+            └── java
+                └── com
+                    └── cognizant
+                        └── AssertionsTest.java
+AssertionsTest.java
+package com.cognizant;
+
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class AssertionsTest {
+
+    @Test
+    public void verifyAssertions() {
+
+        // Verify equality
+        int expectedSum = 30;
+        int actualSum = 15 + 15;
+        assertEquals(expectedSum, actualSum);
+
+        // Verify true condition
+        assertTrue(100 >= 50);
+
+        // Verify false condition
+        assertFalse(25 < 10);
+
+        // Verify null value
+        String employeeName = null;
+        assertNull(employeeName);
+
+        // Verify object creation
+        Object customer = new Object();
+        assertNotNull(customer);
+    }
+}
+pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cognizant</groupId>
+    <artifactId>JUnitAssertions</artifactId>
+    <version>1.0</version>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
