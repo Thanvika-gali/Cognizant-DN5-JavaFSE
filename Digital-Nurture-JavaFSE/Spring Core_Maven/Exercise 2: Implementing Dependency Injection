@@ -1,0 +1,120 @@
+Project Structure
+LibraryManagement
+│
+├── pom.xml
+│
+├── src
+│   └── main
+│       ├── java
+│       │   └── com
+│       │       └── library
+│       │           ├── repository
+│       │           │      └── BookRepository.java
+│       │           ├── service
+│       │           │      └── BookService.java
+│       │           └── LibraryManagementApplication.java
+│       │
+│       └── resources
+│              └── applicationContext.xml
+1. BookRepository.java
+package com.library.repository;
+
+public class BookRepository {
+
+    public void displayBookDetails() {
+        System.out.println("Book details fetched from repository.");
+    }
+
+}
+2. BookService.java
+package com.library.service;
+
+import com.library.repository.BookRepository;
+
+public class BookService {
+
+    private BookRepository bookRepository;
+
+    // Setter Injection
+    public void setBookRepository(BookRepository bookRepository) {
+        this.bookRepository = bookRepository;
+    }
+
+    public void issueBook() {
+
+        System.out.println("Book Service Executed.");
+
+        bookRepository.displayBookDetails();
+
+    }
+
+}
+3. applicationContext.xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       https://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="bookRepository"
+          class="com.library.repository.BookRepository"/>
+
+    <bean id="bookService"
+          class="com.library.service.BookService">
+
+        <property
+                name="bookRepository"
+                ref="bookRepository"/>
+
+    </bean>
+
+</beans>
+4. LibraryManagementApplication.java
+package com.library;
+
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import com.library.service.BookService;
+
+public class LibraryManagementApplication {
+
+    public static void main(String[] args) {
+
+        ApplicationContext context =
+                new ClassPathXmlApplicationContext("applicationContext.xml");
+
+        BookService service =
+                context.getBean("bookService", BookService.class);
+
+        service.issueBook();
+
+    }
+
+}
+5. pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.library</groupId>
+    <artifactId>LibraryManagement</artifactId>
+    <version>1.0</version>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>5.3.30</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
