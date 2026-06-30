@@ -1,0 +1,113 @@
+Project Structure
+JUnit Testing
+│
+└── Exercise 4 AAA Pattern, Setup and Teardown
+    ├── pom.xml
+    └── src
+        ├── main
+        │   └── java
+        │       └── com
+        │           └── cognizant
+        │               └── Calculator.java
+        │
+        └── test
+            └── java
+                └── com
+                    └── cognizant
+                        └── CalculatorTest.java
+Calculator.java
+package com.cognizant;
+
+public class Calculator {
+
+    public int add(int firstNumber, int secondNumber) {
+        return firstNumber + secondNumber;
+    }
+
+    public int multiply(int firstNumber, int secondNumber) {
+        return firstNumber * secondNumber;
+    }
+}
+CalculatorTest.java
+package com.cognizant;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+public class CalculatorTest {
+
+    private Calculator calculator;
+
+    @Before
+    public void setUp() {
+
+        calculator = new Calculator();
+
+        System.out.println("Setting up test environment...");
+
+    }
+
+    @After
+    public void tearDown() {
+
+        calculator = null;
+
+        System.out.println("Cleaning up after test...");
+
+    }
+
+    @Test
+    public void testAddition() {
+
+        // Arrange
+        int number1 = 15;
+        int number2 = 20;
+
+        // Act
+        int result = calculator.add(number1, number2);
+
+        // Assert
+        assertEquals(35, result);
+    }
+
+    @Test
+    public void testMultiplication() {
+
+        // Arrange
+        int number1 = 6;
+        int number2 = 8;
+
+        // Act
+        int result = calculator.multiply(number1, number2);
+
+        // Assert
+        assertEquals(48, result);
+    }
+}
+pom.xml
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.cognizant</groupId>
+    <artifactId>JUnitAAAPattern</artifactId>
+    <version>1.0</version>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+</project>
