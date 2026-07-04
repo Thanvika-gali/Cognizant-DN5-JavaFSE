@@ -1,0 +1,212 @@
+What is Spring Security?
+
+Spring Security is a framework that provides authentication and authorization for Spring applications. It helps protect web applications from unauthorized access.
+
+Features
+User Authentication
+Role-Based Authorization
+Password Encryption
+CSRF Protection
+JWT Authentication
+Session Management
+What is JWT (JSON Web Token)?
+
+JWT is a secure token used to authenticate users after successful login.
+
+JWT Structure
+Header.Payload.Signature
+Authentication Flow
+User Login
+      │
+      ▼
+Spring Security verifies credentials
+      │
+      ▼
+JWT Token Generated
+      │
+      ▼
+Client stores Token
+      │
+      ▼
+Token sent in Authorization Header
+      │
+      ▼
+JWT Filter validates Token
+      │
+      ▼
+Access Granted
+1. pom.xml Dependencies
+
+Required dependencies for Spring Security and JWT.
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.9.0</version>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+Purpose
+spring-boot-starter-web → Build REST APIs.
+spring-boot-starter-security → Provides authentication and authorization.
+jjwt → Generates and validates JWT tokens.
+spring-boot-starter-test → Supports unit testing.
+2. SecurityConfig
+
+The SecurityConfig class configures Spring Security.
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig extends WebSecurityConfigurerAdapter
+Main Functions
+Creates in-memory users.
+Encrypts passwords.
+Configures security rules.
+Adds JWT Authorization Filter.
+In-Memory Users
+Username : admin
+Password : pwd
+Role     : ADMIN
+
+Username : user
+Password : pwd
+Role     : USER
+Password Encoder
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder();
+}
+
+Encrypts passwords using BCrypt.
+
+HttpSecurity Configuration
+Disable CSRF
+Enable Basic Authentication
+Protect /authenticate
+Add JWT Filter
+3. AuthenticationController
+
+Handles user authentication and generates a JWT token.
+
+Endpoint
+GET /authenticate
+Working
+Receives Authorization Header.
+Decodes username and password.
+Extracts username.
+Generates JWT token.
+Returns token to the client.
+
+Example Response
+
+{
+   "token":"eyJhbGciOiJIUzI1NiJ9..."
+}
+4. JwtAuthorizationFilter
+
+This filter validates the JWT token before allowing access.
+
+Functions
+Reads Authorization Header.
+Checks whether the token starts with Bearer.
+Validates the JWT.
+Extracts username.
+Stores authentication in SecurityContextHolder.
+
+If the token is invalid, access is denied.
+
+5. Country Controller
+
+Provides REST APIs for country information.
+
+Endpoints
+URL	Method	Description
+/country	GET	Returns India
+/countries	GET	Returns all countries
+/countries/{code}	GET	Returns a country by code
+
+Uses CountryService to fetch data.
+
+6. Country Service
+
+Business layer of the application.
+
+Methods
+getCountry(String code)
+Searches for a country by code.
+Returns the matching object.
+Throws CountryNotFoundException if not found.
+getAllCountries()
+
+Returns all countries.
+
+7. Country Model
+
+A simple Java Bean representing a country.
+
+Variables
+code
+name
+
+Includes:
+
+Constructors
+Getters
+Setters
+8. CountryList
+
+Stores all country objects.
+
+@Component
+public class CountryList
+Purpose
+Maintains a list of countries.
+Used by CountryService.
+9. CountryNotFoundException
+
+Custom exception thrown when the requested country is unavailable.
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+HTTP Response
+404 Not Found
+
+Country not found
+10. application.properties
+server.port=8083
+
+Runs the application on port 8083.
+
+11. Main Application
+@SpringBootApplication
+@ImportResource("classpath:country.xml")
+Purpose
+Starts the Spring Boot application.
+Loads the XML configuration file.
+Creates Spring Beans.
+12. country.xml
+
+Contains the configuration for CountryList.
+
+It creates four country objects.
+
+IN  → India
+
+US  → United States
+
+JP  → Japan
+
+DE  → Germany
