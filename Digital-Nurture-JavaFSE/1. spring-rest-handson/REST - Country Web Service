@@ -1,0 +1,265 @@
+1. Country Model Class
+
+The Country class is a simple Java Bean (POJO) used to store country information such as country code and country name.
+
+Features
+Contains two private variables: code and name.
+Includes both default and parameterized constructors.
+Provides getter and setter methods to access and modify data.
+package com.cognizant.springlearn.model;
+
+public class Country {
+
+    private String code;
+    private String name;
+
+    public Country() {
+    }
+
+    public Country(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+2. CountryList Configuration Class
+
+The CountryList class acts as a container for storing multiple Country objects. It is registered as a Spring Bean using the @Component annotation.
+
+Features
+Stores a list of countries.
+Provides getter and setter methods.
+Automatically managed by the Spring Container.
+package com.cognizant.springlearn.service;
+
+import java.util.List;
+import org.springframework.stereotype.Component;
+import com.cognizant.springlearn.model.Country;
+
+@Component
+public class CountryList {
+
+    private List<Country> countries;
+
+    public List<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
+    }
+}
+3. Country Service
+
+The Service Layer contains the business logic. It fetches the list of countries from CountryList and returns the details of India.
+
+Features
+Annotated with @Service.
+Uses @Autowired for Dependency Injection.
+Searches for the country whose code is "IN".
+package com.cognizant.springlearn.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.cognizant.springlearn.model.Country;
+
+@Service
+public class CountryService {
+
+    @Autowired
+    private CountryList countryList;
+
+    public Country getCountryIndia() {
+
+        System.out.println("Inside Service");
+
+        List<Country> countries = countryList.getCountries();
+
+        for (Country country : countries) {
+            if (country.getCode().equalsIgnoreCase("IN")) {
+                return country;
+            }
+        }
+
+        return null;
+    }
+}
+Explanation
+@Service → Marks the class as the Service layer.
+@Autowired → Injects the CountryList bean.
+Returns the country object whose code is "IN".
+4. Country Controller
+
+The Controller Layer receives HTTP requests and calls the service layer.
+
+Features
+Annotated with @RestController.
+Maps the URL /country.
+Returns a Country object as JSON.
+package com.cognizant.springlearn.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cognizant.springlearn.model.Country;
+import com.cognizant.springlearn.service.CountryService;
+
+@RestController
+public class CountryController {
+
+    @Autowired
+    private CountryService countryService;
+
+    @RequestMapping("/country")
+    public Country getCountryIndia() {
+
+        System.out.println("Inside Controller");
+
+        return countryService.getCountryIndia();
+    }
+}
+URL Mapping
+GET http://localhost:8083/country
+Sample Response
+{
+    "code":"IN",
+    "name":"India"
+}
+5. Spring XML Configuration (country.xml)
+
+The XML file creates and initializes the CountryList bean with predefined country data.
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="countryList"
+          class="com.cognizant.springlearn.service.CountryList">
+
+        <property name="countries">
+
+            <list>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="IN"/>
+                    <property name="name" value="India"/>
+                </bean>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="US"/>
+                    <property name="name" value="United States"/>
+                </bean>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="JP"/>
+                    <property name="name" value="Japan"/>
+                </bean>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="DE"/>
+                    <property name="name" value="Germany"/>
+                </bean>
+
+            </list>
+
+        </property>
+
+    </bean>
+
+</beans>
+Purpose
+Creates the CountryList bean.
+Loads four country objects.
+Injects the list into CountryList.
+6. Main Application Class
+
+This is the entry point of the Spring Boot application.
+
+package com.cognizant.springlearn;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
+
+@SpringBootApplication
+@ImportResource("classpath:country.xml")
+public class SpringLearnApplication {
+
+    public static void main(String[] args) {
+
+        SpringApplication.run(SpringLearnApplication.class, args);
+
+    }
+}
+Explanation
+@SpringBootApplication → Starts the Spring Boot application.
+@ImportResource → Loads the country.xml configuration file.
+SpringApplication.run() → Initializes the Spring Container and starts the embedded server.
+7. application.properties
+server.port=8083
+Purpose
+Changes the default server port from 8080 to 8083.
+
+The application will run at:
+
+http://localhost:8083
+Testing the REST API
+Method 1: Run the Application
+mvn spring-boot:run
+Method 2: Test in Browser
+
+Open the following URL:
+
+http://localhost:8083/country
+
+Expected Output:
+
+{
+   "code":"IN",
+   "name":"India"
+}
+Method 3: Using cURL
+curl -i http://localhost:8083/country
+
+The -i option displays both the response body and HTTP headers.
+
+Method 4: Using Postman
+Method: GET
+URL: http://localhost:8083/country
+
+Verify:
+
+Status Code: 200 OK
+Response Body contains JSON.
+Headers tab displays HTTP response headers.
+Method 5: Browser Developer Tools
+Open Google Chrome.
+Navigate to:
+http://localhost:8083/country
+Press F12.
+Open the Network tab.
+Select the request to view:
+Request Headers
+Response Headers
+Status Code
+JSON Response Body
