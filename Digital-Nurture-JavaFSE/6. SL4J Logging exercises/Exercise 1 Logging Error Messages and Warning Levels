@@ -1,0 +1,253 @@
+What is Logging?
+
+Logging is the process of recording important events, messages, warnings, and errors that occur while an application is running. It helps developers monitor application behavior, debug issues, and track execution flow.
+
+Benefits of Logging
+Helps identify errors quickly.
+Simplifies debugging.
+Tracks application execution.
+Records important events.
+Useful for monitoring production applications.
+What is SLF4J?
+
+SLF4J (Simple Logging Facade for Java) is a logging API that provides a common interface for different logging frameworks.
+
+Advantages
+Simple and lightweight.
+Independent of the logging implementation.
+Supports parameterized logging.
+Easy to switch between logging frameworks.
+What is Logback?
+
+Logback is the default logging framework used with Spring Boot. It works together with SLF4J to generate log messages.
+
+Features
+Fast performance.
+Flexible configuration.
+Supports console and file logging.
+Supports different log levels.
+Log Levels
+Level	Purpose
+ERROR	Records critical errors that stop application execution.
+WARN	Indicates potential problems or warnings.
+INFO	Displays general application information.
+DEBUG	Used for debugging during development.
+TRACE	Provides detailed execution information.
+1. LoggingExample.java
+
+This program demonstrates different logging levels using SLF4J.
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public class LoggingExample {
+
+    private static final Logger logger =
+            LoggerFactory.getLogger(LoggingExample.class);
+
+    public static void main(String[] args) {
+
+        logger.error("This is an error message");
+
+        logger.warn("This is a warning message");
+
+        logger.info("This is an information message");
+
+        logger.debug("This is a debug message");
+
+        logger.trace("This is a trace message");
+
+        int userId = 42;
+        String username = "Alice";
+
+        logger.info("User logged in: id={}, username={}",
+                userId, username);
+
+        try {
+
+            int result = 10 / 0;
+
+        } catch (ArithmeticException e) {
+
+            logger.error("Division by zero occurred", e);
+
+        }
+
+        if (logger.isDebugEnabled()) {
+
+            logger.debug("Debug mode is enabled");
+
+        }
+
+    }
+
+}
+Code Explanation
+Creating Logger Object
+private static final Logger logger =
+        LoggerFactory.getLogger(LoggingExample.class);
+Creates a logger instance.
+Used to print log messages.
+ERROR Log
+logger.error("This is an error message");
+
+Used to log critical errors.
+
+Example:
+
+ERROR - Database connection failed
+WARN Log
+logger.warn("This is a warning message");
+
+Used to indicate warnings.
+
+Example:
+
+WARN - Low disk space
+INFO Log
+logger.info("This is an information message");
+
+Displays general application information.
+
+Example:
+
+INFO - Application Started
+DEBUG Log
+logger.debug("This is a debug message");
+
+Used during development for debugging.
+
+Example:
+
+DEBUG - User details loaded
+TRACE Log
+logger.trace("This is a trace message");
+
+Provides detailed execution information.
+
+Example:
+
+TRACE - Entering calculateSalary() method
+Parameterized Logging
+logger.info(
+    "User logged in: id={}, username={}",
+    userId,
+    username
+);
+Output
+INFO User logged in: id=42, username=Alice
+
+Advantages
+
+Better performance.
+No string concatenation.
+Cleaner code.
+Exception Logging
+try {
+
+    int result = 10 / 0;
+
+} catch (ArithmeticException e) {
+
+    logger.error("Division by zero occurred", e);
+
+}
+
+Logs the error message along with the complete stack trace.
+
+Checking Debug Mode
+if(logger.isDebugEnabled()){
+
+    logger.debug("Debug mode is enabled");
+
+}
+
+Prints the debug message only if DEBUG logging is enabled.
+
+Maven Dependencies
+SLF4J API
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>2.0.9</version>
+</dependency>
+
+Purpose
+
+Provides the logging API.
+Logback
+<dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.4.11</version>
+</dependency>
+
+Purpose
+
+Implements the SLF4J API.
+Prints log messages to the console or file.
+Logback Configuration (logback.xml)
+<configuration>
+
+    <appender name="STDOUT"
+        class="ch.qos.logback.core.ConsoleAppender">
+
+        <encoder>
+
+            <pattern>
+                %d{HH:mm:ss.SSS}
+                [%thread]
+                %-5level
+                %logger{36}
+                - %msg%n
+            </pattern>
+
+        </encoder>
+
+    </appender>
+
+    <root level="debug">
+
+        <appender-ref ref="STDOUT"/>
+
+    </root>
+
+</configuration>
+Explanation
+ConsoleAppender → Displays logs in the console.
+Pattern → Defines the log format.
+Root Level → Sets the minimum log level to DEBUG.
+Log Pattern
+%d{HH:mm:ss.SSS}
+
+Displays the current time.
+
+[%thread]
+
+Displays the thread name.
+
+%-5level
+
+Displays the log level.
+
+%logger{36}
+
+Displays the logger class name.
+
+%msg
+
+Displays the log message.
+
+%n
+
+Moves to the next line.
+
+Sample Output
+10:30:15.123 [main] ERROR LoggingExample - This is an error message
+10:30:15.124 [main] WARN  LoggingExample - This is a warning message
+10:30:15.125 [main] INFO  LoggingExample - This is an information message
+10:30:15.126 [main] DEBUG LoggingExample - This is a debug message
+10:30:15.127 [main] TRACE LoggingExample - This is a trace message
+10:30:15.128 [main] INFO  LoggingExample - User logged in: id=42, username=Alice
+10:30:15.129 [main] ERROR LoggingExample - Division by zero occurred
+java.lang.ArithmeticException: / by zero
