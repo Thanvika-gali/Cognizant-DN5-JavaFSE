@@ -1,0 +1,264 @@
+What are Microservices?
+
+Microservices is an architectural style where an application is divided into multiple small, independent services. Each service performs a specific business function and communicates with other services using REST APIs.
+
+Advantages
+Independent deployment
+Easy maintenance
+Better scalability
+Fault isolation
+Faster development by different teams
+ACCOUNT MICROSERVICE
+1. pom.xml
+
+The pom.xml file manages all dependencies required for the Account Service.
+
+Dependencies
+spring-boot-starter-web
+Used to create REST APIs.
+spring-boot-devtools
+Automatically restarts the application during development.
+spring-boot-starter-test
+Provides JUnit and testing libraries.
+2. Account Model
+
+The Account class is a Java Bean that stores account information.
+
+Attributes
+Variable	Description
+number	Account Number
+type	Account Type
+balance	Available Balance
+public class Account {
+
+    private String number;
+    private String type;
+    private double balance;
+
+    // Constructors
+
+    // Getters
+
+    // Setters
+
+}
+Purpose
+Represents account details.
+Used as the response object for REST APIs.
+3. Account Controller
+
+The controller handles requests related to account details.
+
+@RestController
+public class AccountController {
+
+    @GetMapping("/accounts/{number}")
+    public Account getAccountDetails(@PathVariable String number){
+
+        Account account =
+            new Account("00987987973432",
+                        "Savings",
+                        234343.00);
+
+        return account;
+    }
+}
+URL
+GET http://localhost:8080/accounts/{number}
+Example
+http://localhost:8080/accounts/00987987973432
+Sample Response
+{
+  "number":"00987987973432",
+  "type":"Savings",
+  "balance":234343.0
+}
+4. application.properties
+server.port=8080
+
+spring.application.name=account-service
+Purpose
+Runs Account Service on Port 8080.
+Registers application name as account-service.
+5. Main Class
+@SpringBootApplication
+public class AccountApplication {
+
+    public static void main(String[] args){
+
+        SpringApplication.run(AccountApplication.class,args);
+
+    }
+}
+Purpose
+Starts the Account Microservice.
+Creates Spring IoC Container.
+Starts embedded Tomcat server.
+LOAN MICROSERVICE
+1. pom.xml
+
+Uses the same dependencies as the Account Service.
+
+Required Dependencies
+Spring Boot Starter Web
+Spring Boot DevTools
+Spring Boot Starter Test
+2. Loan Model
+
+Represents loan information.
+
+Variables
+Variable	Description
+number	Loan Number
+type	Loan Type
+loan	Loan Amount
+emi	Monthly EMI
+tenure	Loan Duration
+public class Loan {
+
+    private String number;
+    private String type;
+    private double loan;
+    private double emi;
+    private int tenure;
+
+    // Constructors
+
+    // Getters
+
+    // Setters
+
+}
+3. Loan Controller
+
+Handles requests related to loans.
+
+@RestController
+public class LoanController {
+
+    @GetMapping("/loans/{number}")
+    public Loan getLoanDetails(@PathVariable String number){
+
+        Loan loan =
+            new Loan("H00987987972342",
+                     "Car",
+                     400000,
+                     3258,
+                     18);
+
+        return loan;
+    }
+}
+URL
+GET http://localhost:8081/loans/{number}
+Example
+http://localhost:8081/loans/H00987987972342
+Sample Response
+{
+   "number":"H00987987972342",
+   "type":"Car",
+   "loan":400000.0,
+   "emi":3258.0,
+   "tenure":18
+}
+4. application.properties
+server.port=8081
+
+spring.application.name=loan-service
+Purpose
+Runs Loan Service on Port 8081.
+Registers application as loan-service.
+5. Main Class
+@SpringBootApplication
+public class LoanApplication {
+
+    public static void main(String[] args){
+
+        SpringApplication.run(LoanApplication.class,args);
+
+    }
+}
+Purpose
+
+Starts the Loan Microservice.
+
+Testing the Services
+Test Account Service
+URL
+http://localhost:8080/accounts/00987987973432
+Response
+{
+  "number":"00987987973432",
+  "type":"Savings",
+  "balance":234343.0
+}
+Test Loan Service
+URL
+http://localhost:8081/loans/H00987987972342
+Response
+{
+   "number":"H00987987972342",
+   "type":"Car",
+   "loan":400000.0,
+   "emi":3258.0,
+   "tenure":18
+}
+Test using cURL
+Account Service
+curl -i http://localhost:8080/accounts/00987987973432
+Loan Service
+curl -i http://localhost:8081/loans/H00987987972342
+Test using Postman
+Account Service
+Method: GET
+URL:
+http://localhost:8080/accounts/00987987973432
+Loan Service
+Method: GET
+URL:
+http://localhost:8081/loans/H00987987972342
+Project Architecture
+                Client
+                  │
+      ┌───────────┴───────────┐
+      │                       │
+      ▼                       ▼
+Account Service          Loan Service
+ Port : 8080             Port : 8081
+      │                       │
+      ▼                       ▼
+AccountController      LoanController
+      │                       │
+      ▼                       ▼
+Account Object         Loan Object
+      │                       │
+      └───────────┬───────────┘
+                  ▼
+             JSON Response
+Monolithic vs Microservices
+Monolithic Architecture	Microservices Architecture
+Single application	Multiple independent services
+Single deployment	Independent deployment
+Difficult to scale	Easy to scale each service
+Single point of failure	Failure of one service doesn't affect others
+Entire application must be redeployed	Only modified service needs deployment
+One technology stack	Different technologies can be used
+Benefits of Microservices
+1. Independent Services
+
+Each microservice works separately without depending on others.
+
+2. Different Ports
+Account Service → 8080
+Loan Service → 8081
+3. Fault Isolation
+
+If one service crashes, the other services continue running.
+
+4. Team Collaboration
+
+Different teams can develop different services simultaneously.
+
+5. Independent Deployment
+
+Each service can be updated and deployed without affecting other services.
