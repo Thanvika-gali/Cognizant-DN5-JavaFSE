@@ -1,0 +1,223 @@
+What is Mockito Verification?
+
+Mockito provides verification methods to check whether a mocked object's methods were called during test execution. It is useful for validating interactions between objects in unit testing.
+
+Advantages
+Confirms method invocation.
+Checks method arguments.
+Verifies the number of method calls.
+Ensures methods are never called when required.
+Supports flexible argument matching.
+Common Verification Methods
+Method	Purpose
+verify()	Confirms a method was invoked.
+times(n)	Checks the exact number of method calls.
+never()	Verifies a method was not called.
+atLeast(n)	Ensures a method was called at least n times.
+anyInt()	Matches any integer argument.
+anyString()	Matches any string argument.
+eq()	Matches an exact argument value.
+Example Structure
+ExternalApi (Dependency)
+        │
+        ▼
+Mockito Mock
+        │
+        ▼
+MyService
+        │
+        ▼
+JUnit Test Cases
+1. ExternalApi Interface
+
+The ExternalApi interface represents an external dependency used by the service.
+
+interface ExternalApi {
+
+    void sendData(String data);
+
+    void processUser(int userId, String username);
+
+    String getData();
+
+}
+Purpose
+Represents an external service.
+Replaced with a mock object during testing.
+2. Service Class
+
+MyService is the class being tested.
+
+class MyService {
+
+    private final ExternalApi externalApi;
+
+    public MyService(ExternalApi externalApi) {
+        this.externalApi = externalApi;
+    }
+
+    public void doWork() {
+        externalApi.sendData("important");
+    }
+
+    public void registerUser(int id, String name) {
+        externalApi.processUser(id, name);
+    }
+
+    public String fetchData() {
+        return externalApi.getData();
+    }
+}
+Purpose
+Calls methods of ExternalApi.
+Tested using mocked dependencies.
+3. Test Cases
+Test 1: Verify Method Invocation
+@Test
+public void testVerifySendDataCalled() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    MyService service = new MyService(mockApi);
+
+    service.doWork();
+
+    verify(mockApi).sendData("important");
+
+}
+Explanation
+Creates a mock object.
+Calls doWork().
+Verifies that sendData("important") was called.
+Test 2: Verify Exact Arguments
+@Test
+public void testVerifyProcessUserWithExactArgs() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    MyService service = new MyService(mockApi);
+
+    service.registerUser(42, "Alice");
+
+    verify(mockApi).processUser(42, "Alice");
+
+}
+Explanation
+Verifies that the method received the exact arguments.
+Checks both user ID and username.
+Test 3: Verify Method Never Called
+@Test
+public void testVerifyNeverCalled() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    MyService service = new MyService(mockApi);
+
+    verify(mockApi, never()).sendData(anyString());
+
+}
+Explanation
+Ensures sendData() was never executed.
+Uses never() to verify zero invocations.
+Test 4: Verify Number of Calls
+@Test
+public void testVerifyNumberOfCalls() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    MyService service = new MyService(mockApi);
+
+    service.doWork();
+    service.doWork();
+
+    verify(mockApi, times(2)).sendData("important");
+
+}
+Explanation
+Calls doWork() twice.
+Verifies sendData() was invoked exactly two times.
+Test 5: Verify At Least Once
+@Test
+public void testVerifyAtLeastOnce() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    MyService service = new MyService(mockApi);
+
+    service.fetchData();
+    service.fetchData();
+
+    verify(mockApi, atLeast(1)).getData();
+
+}
+Explanation
+Calls fetchData() multiple times.
+Verifies getData() was called at least once.
+Test 6: Verify Using Argument Matchers
+@Test
+public void testVerifyWithArgumentMatchers() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    MyService service = new MyService(mockApi);
+
+    service.registerUser(99, "Bob");
+
+    verify(mockApi).processUser(anyInt(), eq("Bob"));
+
+}
+Explanation
+anyInt() accepts any integer value.
+eq("Bob") ensures the second argument is exactly "Bob".
+Mockito Verification Flow
+Create Mock Object
+        │
+        ▼
+Inject Mock into Service
+        │
+        ▼
+Execute Service Method
+        │
+        ▼
+Mockito Records Calls
+        │
+        ▼
+verify() Checks Interaction
+        │
+        ▼
+Test Pass / Fail
+Common Argument Matchers
+Matcher	Description
+anyInt()	Matches any integer value.
+anyString()	Matches any string value.
+eq(value)	Matches the specified value exactly.
+any()	Matches any object.
+isNull()	Matches a null value.
+notNull()	Matches any non-null value.
+Verification Methods Summary
+Method	Description
+verify(mock)	Verifies a method was called.
+verify(mock, times(2))	Checks exact number of calls.
+verify(mock, never())	Ensures method was never called.
+verify(mock, atLeast(1))	Checks minimum number of calls.
+verify(mock).method(anyInt(), eq("Bob"))	Verifies method using argument matchers.
+Overall Testing Flow
+JUnit Test
+     │
+     ▼
+Create Mockito Mock
+     │
+     ▼
+Inject Mock into Service
+     │
+     ▼
+Execute Service Method
+     │
+     ▼
+Mockito Records Method Calls
+     │
+     ▼
+verify() Confirms Expected Interaction
+     │
+     ▼
+Test Result (Pass / Fail)
