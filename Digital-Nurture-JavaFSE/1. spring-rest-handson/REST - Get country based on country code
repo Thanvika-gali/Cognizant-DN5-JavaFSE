@@ -1,0 +1,254 @@
+1. Country Model Class
+
+The Country class is a simple Java Bean (POJO) that stores information about a country.
+
+Features
+Contains country code and country name.
+Includes default and parameterized constructors.
+Provides getter and setter methods.
+package com.cognizant.springlearn.model;
+
+public class Country {
+
+    private String code;
+    private String name;
+
+    public Country() {
+    }
+
+    public Country(String code, String name) {
+        this.code = code;
+        this.name = name;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+}
+2. CountryList Configuration Class
+
+The CountryList class stores multiple Country objects and is managed by the Spring Container.
+
+Features
+Annotated with @Component.
+Contains a list of countries.
+Provides getter and setter methods.
+package com.cognizant.springlearn.service;
+
+import java.util.List;
+import org.springframework.stereotype.Component;
+import com.cognizant.springlearn.model.Country;
+
+@Component
+public class CountryList {
+
+    private List<Country> countries;
+
+    public List<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
+    }
+}
+3. Country Service
+
+The Service Layer contains the business logic. It searches for a country based on the country code received from the controller.
+
+Features
+Uses @Service annotation.
+Injects CountryList using @Autowired.
+Returns the matching country object.
+package com.cognizant.springlearn.service;
+
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.cognizant.springlearn.model.Country;
+
+@Service
+public class CountryService {
+
+    @Autowired
+    private CountryList countryList;
+
+    public Country getCountry(String code) {
+
+        System.out.println("Searching country: " + code);
+
+        List<Country> countries = countryList.getCountries();
+
+        Country result = null;
+
+        for (Country country : countries) {
+
+            if (country.getCode().equalsIgnoreCase(code)) {
+                result = country;
+                break;
+            }
+
+        }
+
+        return result;
+    }
+}
+Explanation
+@Service → Marks the class as the service layer.
+@Autowired → Injects the CountryList bean.
+Loops through the list and returns the country whose code matches the given input.
+4. Country Controller
+
+The Controller Layer handles incoming HTTP requests and forwards them to the service layer.
+
+Features
+Uses @RestController.
+Maps the URL using @GetMapping.
+Reads the country code using @PathVariable.
+package com.cognizant.springlearn.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cognizant.springlearn.model.Country;
+import com.cognizant.springlearn.service.CountryService;
+
+@RestController
+public class CountryController {
+
+    @Autowired
+    private CountryService countryService;
+
+    @GetMapping("/countries/{code}")
+    public Country getCountry(@PathVariable String code) {
+
+        return countryService.getCountry(code);
+
+    }
+}
+URL Format
+GET http://localhost:8083/countries/{code}
+Example Requests
+http://localhost:8083/countries/IN
+http://localhost:8083/countries/US
+http://localhost:8083/countries/JP
+Sample Response
+{
+    "code":"US",
+    "name":"United States"
+}
+5. Spring XML Configuration (country.xml)
+
+The XML file initializes the CountryList bean with predefined country data.
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="countryList"
+          class="com.cognizant.springlearn.service.CountryList">
+
+        <property name="countries">
+
+            <list>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="IN"/>
+                    <property name="name" value="India"/>
+                </bean>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="US"/>
+                    <property name="name" value="United States"/>
+                </bean>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="JP"/>
+                    <property name="name" value="Japan"/>
+                </bean>
+
+                <bean class="com.cognizant.springlearn.model.Country">
+                    <property name="code" value="DE"/>
+                    <property name="name" value="Germany"/>
+                </bean>
+
+            </list>
+
+        </property>
+
+    </bean>
+
+</beans>
+Purpose
+Creates the CountryList bean.
+Adds four country objects.
+Makes them available for the service layer.
+6. Main Application Class
+
+This class starts the Spring Boot application.
+
+package com.cognizant.springlearn;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ImportResource;
+
+@SpringBootApplication
+@ImportResource("classpath:country.xml")
+public class SpringLearnApplication {
+
+    public static void main(String[] args) {
+
+        SpringApplication.run(SpringLearnApplication.class, args);
+
+    }
+}
+Explanation
+@SpringBootApplication → Enables Spring Boot features.
+@ImportResource → Loads the XML configuration.
+SpringApplication.run() → Starts the application.
+7. application.properties
+server.port=8083
+Purpose
+
+Runs the application on Port 8083.
+
+Application URL:
+
+http://localhost:8083
+Lambda Expression Alternative
+
+Instead of using a for loop, Java 8 Streams can be used to find a country.
+
+public Country getCountry(String code) {
+
+    List<Country> countries = countryList.getCountries();
+
+    return countries.stream()
+            .filter(country -> country.getCode().equalsIgnoreCase(code))
+            .findFirst()
+            .orElse(null);
+
+}
+Advantages of Lambda Expression
+Less code.
+Easier to read.
+Uses Java Stream API.
+Suitable for filtering collections.
