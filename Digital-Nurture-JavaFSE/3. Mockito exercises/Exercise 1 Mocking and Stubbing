@@ -1,0 +1,201 @@
+What is Mockito?
+
+Mockito is a popular Java testing framework used to create mock objects for unit testing. It helps test a class without depending on real implementations of external classes or APIs.
+
+Advantages
+Creates fake (mock) objects.
+Isolates the class under test.
+Makes unit testing faster.
+Reduces dependency on databases, APIs, or external services.
+Verifies method interactions.
+Important Mockito Methods
+Method	Purpose
+mock()	Creates a mock object.
+when()	Defines mock behavior (stubbing).
+thenReturn()	Specifies the value returned by a mock method.
+verify()	Checks whether a method was called.
+times()	Verifies how many times a method was invoked.
+assertEquals()	Compares expected and actual values.
+Example Structure
+External API (Dependency)
+          │
+          ▼
+      Mock Object
+          │
+          ▼
+     MyService Class
+          │
+          ▼
+      Unit Test
+1. External API Interface
+
+The ExternalApi interface represents an external dependency used by the service.
+
+interface ExternalApi {
+
+    String getData();
+
+    String getDataById(int id);
+
+}
+Purpose
+Represents an external API.
+Will be replaced with a mock during testing.
+Avoids calling a real service.
+2. Service Class (Class Under Test)
+
+The MyService class depends on ExternalApi.
+
+class MyService {
+
+    private final ExternalApi externalApi;
+
+    public MyService(ExternalApi externalApi) {
+        this.externalApi = externalApi;
+    }
+
+    public String fetchData() {
+        return externalApi.getData();
+    }
+
+    public String fetchDataById(int id) {
+        return externalApi.getDataById(id);
+    }
+}
+Explanation
+Uses Constructor Injection.
+Calls methods of ExternalApi.
+Business logic is tested using mocked objects.
+3. Unit Test Class
+
+The MyServiceTest class tests MyService using Mockito.
+
+Test Case 1: Mocking a Method
+@Test
+public void testFetchData_WithMockedApi() {
+
+    ExternalApi mockApi = Mockito.mock(ExternalApi.class);
+
+    when(mockApi.getData()).thenReturn("Mock Data");
+
+    MyService service = new MyService(mockApi);
+
+    String result = service.fetchData();
+
+    assertEquals("Mock Data", result);
+
+}
+Explanation
+Creates a mock object.
+Defines return value using when().thenReturn().
+Calls the service method.
+Verifies the returned result using assertEquals().
+Test Case 2: Parameterized Stubbing
+@Test
+public void testFetchDataById_WithParameterizedStubbing() {
+
+    ExternalApi mockApi = mock(ExternalApi.class);
+
+    when(mockApi.getDataById(1))
+            .thenReturn("User: Alice");
+
+    when(mockApi.getDataById(2))
+            .thenReturn("User: Bob");
+
+    MyService service = new MyService(mockApi);
+
+    assertEquals("User: Alice",
+            service.fetchDataById(1));
+
+    assertEquals("User: Bob",
+            service.fetchDataById(2));
+
+}
+Explanation
+Returns different values for different input parameters.
+Demonstrates parameter-based stubbing.
+Ensures correct output for each input.
+Test Case 3: Verify Method Call
+@Test
+public void testFetchData_VerifyInteraction() {
+
+    ExternalApi mockApi = mock(ExternalApi.class);
+
+    when(mockApi.getData())
+            .thenReturn("Verified Data");
+
+    MyService service = new MyService(mockApi);
+
+    service.fetchData();
+
+    verify(mockApi, times(1)).getData();
+
+}
+Explanation
+Calls the service method.
+Uses verify() to ensure getData() was called.
+times(1) confirms the method executed exactly once.
+Mockito Execution Flow
+Create Mock Object
+        │
+        ▼
+Stub Method using when()
+        │
+        ▼
+Create Service Object
+        │
+        ▼
+Call Service Method
+        │
+        ▼
+Mock Returns Dummy Data
+        │
+        ▼
+Verify Output using assertEquals()
+        │
+        ▼
+Verify Interaction using verify()
+Maven Dependencies
+
+Add the following dependencies to pom.xml.
+
+JUnit 5
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.10.0</version>
+    <scope>test</scope>
+</dependency>
+
+Purpose: Provides annotations and assertions for unit testing.
+
+Mockito
+<dependency>
+    <groupId>org.mockito</groupId>
+    <artifactId>mockito-core</artifactId>
+    <version>5.8.0</version>
+    <scope>test</scope>
+</dependency>
+
+Purpose: Creates mock objects and verifies interactions.
+
+Testing Process
+JUnit Test
+     │
+     ▼
+Mockito creates Mock Object
+     │
+     ▼
+Stub Required Methods
+     │
+     ▼
+Inject Mock into Service
+     │
+     ▼
+Execute Service Method
+     │
+     ▼
+Compare Expected Output
+     │
+     ▼
+Verify Method Calls
