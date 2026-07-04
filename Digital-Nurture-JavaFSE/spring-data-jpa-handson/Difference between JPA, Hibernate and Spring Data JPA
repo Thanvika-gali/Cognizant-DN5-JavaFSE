@@ -1,0 +1,133 @@
+1. Java Persistence API (JPA)
+
+- JPA (Java Persistence API) is the standard Java specification used for mapping Java objects to relational databases.
+- It provides a common set of interfaces and annotations for performing database operations.
+- JPA itself is only a specification; it does not contain any implementation.
+- Different ORM frameworks such as Hibernate, EclipseLink, and OpenJPA implement the JPA specification.
+
+Common JPA Imports
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Id;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+Example Entity
+@Entity
+@Table(name = "employee")
+public class Employee {
+
+    @Id
+    private int id;
+
+    private String name;
+}
+2. Hibernate
+Hibernate is a widely used ORM framework that implements the JPA specification.
+It automatically converts Java objects into database records and vice versa.
+Hibernate can be used either through JPA or by using its own native API.
+It manages SQL generation, database connections, caching, lazy loading, and transaction handling.
+Hibernate Native API Example
+Session session = sessionFactory.openSession();
+Transaction transaction = session.beginTransaction();
+
+session.save(employee);
+
+transaction.commit();
+session.close();
+Core Hibernate Components
+Component	Description
+SessionFactory	Creates Session objects and is shared throughout the application.
+Session	Used to perform CRUD operations with the database.
+Transaction	Ensures database operations are executed safely as a single unit.
+ConnectionProvider	Supplies JDBC connections to Hibernate.
+Spring Data JPA Repository
+@Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+
+}
+Extending JpaRepository automatically provides CRUD methods.
+No need to manually write SQL or Hibernate session code for common operations.
+Hibernate Approach (Traditional)
+public Integer saveEmployee(Employee employee) {
+
+    Session session = sessionFactory.openSession();
+    Transaction transaction = null;
+    Integer id = null;
+
+    try {
+        transaction = session.beginTransaction();
+
+        id = (Integer) session.save(employee);
+
+        transaction.commit();
+    }
+    catch (HibernateException e) {
+
+        if (transaction != null) {
+            transaction.rollback();
+        }
+
+        e.printStackTrace();
+    }
+    finally {
+        session.close();
+    }
+
+    return id;
+}
+Spring Data JPA Approach
+Repository
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
+
+}
+Service Layer
+@Service
+public class EmployeeService {
+
+    @Autowired
+    private EmployeeRepository repository;
+
+    @Transactional
+    public void saveEmployee(Employee employee) {
+
+        repository.save(employee);
+
+    }
+}
+
+Advantages:
+
+Minimal coding effort
+Automatic transaction handling
+Built-in CRUD methods
+Cleaner and easier-to-maintain code
+Architecture Overview
+┌────────────────────────────────────────────┐
+│           Spring Data JPA                  │
+│ Repository Interfaces, @Transactional      │
+├────────────────────────────────────────────┤
+│               JPA                          │
+│ EntityManager, Annotations, Interfaces     │
+├────────────────────────────────────────────┤
+│ Hibernate / EclipseLink / OpenJPA          │
+│ ORM Implementation                         │
+├────────────────────────────────────────────┤
+│ JDBC Driver & Relational Database          │
+│ MySQL, PostgreSQL, Oracle, SQL Server      │
+└────────────────────────────────────────────┘
+Layer Explanation
+Spring Data JPA: Simplifies database access by providing repository interfaces and automatic CRUD functionality.
+JPA: Defines standard APIs and annotations for object-relational mapping.
+Hibernate: Implements JPA and performs ORM, SQL generation, caching, and transaction management.
+JDBC & Database: Executes SQL queries and stores application data.
+Relationship Between Them
+Spring Data JPA
+        ↓
+      JPA
+        ↓
+   Hibernate
+        ↓
+ JDBC Driver
+        ↓
+   Database
