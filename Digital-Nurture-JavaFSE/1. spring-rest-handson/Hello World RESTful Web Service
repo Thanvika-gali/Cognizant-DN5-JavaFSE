@@ -1,0 +1,646 @@
+What is a RESTful Web Service?
+
+A RESTful Web Service is an application programming interface (API) that follows the REST (Representational State Transfer) architecture. It enables communication between client applications and servers using the HTTP protocol.
+
+REST services are lightweight, easy to develop, and commonly exchange data in JSON format.
+
+Features of REST
+Uses HTTP methods like GET, POST, PUT, DELETE
+Platform independent
+Stateless communication
+Supports JSON and XML data formats
+Easy to integrate with web and mobile applications
+Common HTTP Methods
+Method	Purpose
+GET	Retrieve data from server
+POST	Insert new data
+PUT	Update existing data
+DELETE	Remove data
+Spring Boot REST Controller
+
+Spring Boot provides @RestController to create REST APIs.
+
+What is @RestController?
+Combines @Controller and @ResponseBody
+Returns data directly instead of rendering JSP pages
+Automatically converts Java objects into JSON
+@GetMapping Annotation
+
+@GetMapping maps an HTTP GET request to a Java method.
+
+Example
+
+@GetMapping("/hello")
+
+Whenever a browser requests
+
+http://localhost:8083/hello
+
+the corresponding Java method executes.
+
+1. Hello World REST API
+HelloController.java
+package com.cognizant.springlearn.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class HelloController {
+
+    @GetMapping("/hello")
+    public String displayMessage() {
+
+        System.out.println("Inside displayMessage()");
+
+        String message = "Hello World!!";
+
+        System.out.println("Returning response");
+
+        return message;
+
+    }
+
+}
+Explanation
+@RestController
+
+Marks the class as a REST Controller.
+
+Spring automatically returns the method's result as an HTTP response.
+
+@GetMapping("/hello")
+
+Maps the URL
+
+/hello
+
+to the displayMessage() method.
+
+Return Type
+public String displayMessage()
+
+Since the return type is String, the browser displays
+
+Hello World!!
+Flow of Execution
+Browser Request
+
+        │
+
+GET http://localhost:8083/hello
+
+        │
+
+HelloController
+
+        │
+
+displayMessage()
+
+        │
+
+Returns String
+
+        │
+
+Browser displays
+
+Hello World!!
+Output
+Hello World!!
+
+Console
+
+Inside displayMessage()
+
+Returning response
+2. Country Java Bean
+
+A Bean is a simple Java class that stores data.
+
+This class stores details about a country.
+
+Country.java
+package com.cognizant.springlearn.model;
+
+public class Country {
+
+    private String code;
+
+    private String name;
+
+    public Country() {
+
+    }
+
+    public Country(String code, String name) {
+
+        this.code = code;
+        this.name = name;
+
+    }
+
+    public String getCode() {
+
+        return code;
+
+    }
+
+    public void setCode(String code) {
+
+        this.code = code;
+
+    }
+
+    public String getName() {
+
+        return name;
+
+    }
+
+    public void setName(String name) {
+
+        this.name = name;
+
+    }
+
+}
+Explanation
+Variables
+private String code;
+private String name;
+
+These variables hold
+
+Country Code
+Country Name
+
+Example
+
+IN → India
+
+US → United States
+
+JP → Japan
+Default Constructor
+public Country() {
+
+}
+
+Used when Spring creates the object automatically.
+
+Parameterized Constructor
+public Country(String code,String name)
+
+Creates an object with values.
+
+Example
+
+Country c = new Country("IN","India");
+Getter Methods
+
+Used for reading values.
+
+getCode()
+
+getName()
+Setter Methods
+
+Used for updating values.
+
+setCode()
+
+setName()
+Java Bean Structure
+Country
+
+│
+
+├── code
+
+├── name
+
+├── Constructor
+
+├── Getters
+
+└── Setters
+3. Country Controller
+
+The controller receives client requests and forwards them to the service layer.
+
+CountryController.java
+package com.cognizant.springlearn.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cognizant.springlearn.model.Country;
+import com.cognizant.springlearn.service.CountryService;
+import com.cognizant.springlearn.service.exception.CountryNotFoundException;
+
+@RestController
+public class CountryController {
+
+    @Autowired
+    private CountryService countryService;
+
+    @RequestMapping("/country")
+    public Country getIndia() {
+
+        System.out.println("Fetching India");
+
+        Country country = countryService.getCountry("IN");
+
+        System.out.println("Returning India");
+
+        return country;
+
+    }
+
+    @GetMapping("/countries")
+    public List<Country> fetchCountries() {
+
+        System.out.println("Fetching all countries");
+
+        List<Country> list = countryService.getAllCountries();
+
+        System.out.println("Returning country list");
+
+        return list;
+
+    }
+
+    @GetMapping("/countries/{code}")
+    public Country fetchCountry(@PathVariable String code)
+            throws CountryNotFoundException {
+
+        System.out.println("Searching country : " + code);
+
+        Country country = countryService.getCountry(code);
+
+        System.out.println("Country found");
+
+        return country;
+
+    }
+
+}
+Explanation
+@Autowired
+@Autowired
+private CountryService countryService;
+
+Spring automatically injects the CountryService object.
+
+No need to create
+
+new CountryService();
+Method 1
+@RequestMapping("/country")
+
+URL
+
+http://localhost:8083/country
+
+Returns
+
+{
+ "code":"IN",
+ "name":"India"
+}
+Method 2
+@GetMapping("/countries")
+
+Returns every country stored in the application.
+
+Example
+
+[
+ {
+   "code":"IN",
+   "name":"India"
+ },
+ {
+   "code":"US",
+   "name":"United States"
+ },
+ {
+   "code":"JP",
+   "name":"Japan"
+ },
+ {
+   "code":"DE",
+   "name":"Germany"
+ }
+]
+Method 3
+@GetMapping("/countries/{code}")
+
+Uses Path Variable.
+
+Example URLs
+
+/countries/IN
+
+/countries/US
+
+/countries/JP
+
+The value after
+
+/countries/
+
+is automatically assigned to
+
+@PathVariable String code
+Example
+
+Request
+
+GET /countries/JP
+
+Spring stores
+
+JP
+
+inside
+
+String code
+
+Then
+
+countryService.getCountry(code)
+
+returns
+
+{
+  "code":"JP",
+  "name":"Japan"
+}
+Controller Flow
+Browser
+
+     │
+
+HTTP Request
+
+     │
+
+CountryController
+
+     │
+
+CountryService
+
+     │
+
+CountryList
+
+     │
+
+Country Object
+
+     │
+
+JSON Response
+
+     │
+
+Browser
+URLs Used
+URL	Method	Response
+/hello	GET	Hello World!!
+/country	GET	India details
+/countries	GET	Complete country list
+/countries/{code}	GET	Particular country
+
+4. CountryService
+
+Purpose
+
+Acts as the business layer.
+Receives requests from the Controller.
+Retrieves country data from CountryList.
+@Service
+public class CountryService {
+
+    @Autowired
+    private CountryList countryList;
+
+    public Country getCountry(String code) throws CountryNotFoundException {
+
+        List<Country> countries = countryList.getCountries();
+
+        for (Country country : countries) {
+            if(country.getCode().equalsIgnoreCase(code))
+                return country;
+        }
+
+        throw new CountryNotFoundException();
+    }
+
+    public List<Country> getAllCountries() {
+        return countryList.getCountries();
+    }
+}
+
+Explanation
+
+@Service → Marks the class as a Service component.
+@Autowired → Injects the CountryList bean.
+getCountry() → Searches a country by code.
+getAllCountries() → Returns all countries.
+5. CountryList Bean
+
+Purpose
+
+Stores the list of countries.
+@Component
+public class CountryList {
+
+    private List<Country> countries;
+
+    public List<Country> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
+    }
+}
+
+Explanation
+
+@Component → Registers this class as a Spring Bean.
+Contains getter and setter for the country list.
+6. Custom Exception
+
+Purpose
+
+Thrown when the requested country does not exist.
+@ResponseStatus(value = HttpStatus.NOT_FOUND,
+reason = "Country not found")
+public class CountryNotFoundException extends Exception {
+
+    public CountryNotFoundException() {
+        super("Country not found");
+    }
+}
+
+Explanation
+
+@ResponseStatus → Returns HTTP 404 Not Found.
+Displays the message "Country not found".
+7. XML Bean Configuration (country.xml)
+
+Purpose
+
+Creates and initializes the CountryList bean.
+<bean id="countryList"
+class="com.cognizant.springlearn.service.CountryList">
+
+    <property name="countries">
+        <list>
+
+            <bean class="Country">
+                <property name="code" value="IN"/>
+                <property name="name" value="India"/>
+            </bean>
+
+            <bean class="Country">
+                <property name="code" value="US"/>
+                <property name="name" value="United States"/>
+            </bean>
+
+            <bean class="Country">
+                <property name="code" value="JP"/>
+                <property name="name" value="Japan"/>
+            </bean>
+
+            <bean class="Country">
+                <property name="code" value="DE"/>
+                <property name="name" value="Germany"/>
+            </bean>
+
+        </list>
+    </property>
+
+</bean>
+
+Explanation
+
+Creates a CountryList bean.
+Initializes four Country objects:
+India
+United States
+Japan
+Germany
+Flow
+Controller
+    ↓
+CountryService
+    ↓
+CountryList
+    ↓
+Country Objects
+    ↓
+Response
+
+8. Main Class
+@SpringBootApplication
+@ImportResource("classpath:country.xml")
+public class SpringLearnApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(SpringLearnApplication.class,args);
+    }
+}
+
+Explanation
+
+@SpringBootApplication → Starts the Spring Boot application.
+@ImportResource → Loads country.xml.
+SpringApplication.run() → Creates the Spring container and starts the server.
+9. application.properties
+server.port=8083
+
+Purpose
+
+Changes the default server port from 8080 to 8083.
+
+Run the application using:
+
+http://localhost:8083
+10. MockMVC Test Class
+
+Purpose
+
+Tests REST APIs without starting a real server.
+@SpringBootTest
+@AutoConfigureMockMvc
+class SpringLearnApplicationTests {
+
+    @Autowired
+    private MockMvc mvc;
+
+}
+Test Cases
+
+1. contextLoads()
+
+Checks whether the application starts successfully.
+
+2. testGetCountry()
+
+Tests /country
+Expected:
+Status = 200
+Code = IN
+Name = India
+
+3. testGetAllCountries()
+
+Tests /countries
+Ensures all countries are returned.
+
+4. testGetCountryByCode()
+
+Tests /countries/IN
+Returns India.
+
+5. testGetCountryException()
+
+Tests /countries/XX
+Expected:
+Status = 404
+Message = "Country not found"
+Common MockMvc Methods
+Method	Purpose
+perform()	Sends HTTP request
+status().isOk()	Checks status 200
+status().isNotFound()	Checks status 404
+jsonPath()	Validates JSON response
+value()	Compares expected value
+11. pom.xml Dependencies
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+
+Purpose
+
+spring-boot-starter-web → Develop REST APIs.
+spring-boot-starter-test → Provides JUnit, MockMvc, Mockito, and testing libraries.
