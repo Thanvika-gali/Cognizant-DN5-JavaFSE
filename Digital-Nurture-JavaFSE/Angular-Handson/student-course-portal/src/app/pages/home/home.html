@@ -1,0 +1,46 @@
+<h1>{{portalName}}</h1>
+
+<p>
+Welcome to the Student Course Portal.
+Browse courses, enroll, and track your academic progress.
+</p>
+
+<div class="stats">
+
+    <div class="card" *ngFor="let stat of stats">
+
+        <h3>{{stat.title}}</h3>
+
+        <h2>{{stat.value}}</h2>
+
+    </div>
+
+</div>
+
+<hr>
+
+<input
+type="text"
+[(ngModel)]="searchTerm"
+placeholder="Search Course">
+
+<p>
+
+Searching for :
+<b>{{searchTerm}}</b>
+
+</p>
+
+<button
+[disabled]="!isPortalActive"
+(click)="onEnrollClick()">
+
+Enroll Now
+
+</button>
+
+<h3>
+
+{{message}}
+
+</h3>
