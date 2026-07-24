@@ -112,37 +112,35 @@ http://localhost:4200
 
 ### Course List
 
-<img width="1915" height="782" alt="image" src="https://github.com/user-attachments/assets/093f622c-df63-427d-ae17-8a344bfe8e7e" />
-
----
-
-### Course Details
-
-![Course Details](screenshots/course-details.png)
+<img width="1887" height="863" alt="image" src="https://github.com/user-attachments/assets/e1794821-48ba-452d-b758-f6d38622fc25" />
 
 ---
 
 ### Enrollment Form
 
-![Enrollment](screenshots/enrollment-form.png)
+<img width="1870" height="861" alt="image" src="https://github.com/user-attachments/assets/de528ed1-d3be-4cf0-a5aa-5f54a7d1c65b" />
+
 
 ---
 
 ### Student Profile
 
-![Profile](screenshots/profile.png)
+<img width="1887" height="812" alt="image" src="https://github.com/user-attachments/assets/43d20dcf-e1a4-4439-a4b6-d63a9ac69feb" />
+
 
 ---
 
 ### Edit Course
 
-![Edit](screenshots/edit-course.png)
+<img width="1853" height="850" alt="image" src="https://github.com/user-attachments/assets/4f11b1e5-66e9-427f-8c11-1b1db6d1bd46" />
+
 
 ---
 
 ### Delete Course
 
-![Delete](screenshots/delete-course.png)
+<img width="1871" height="853" alt="image" src="https://github.com/user-attachments/assets/0a96cea0-ab04-4e8d-a454-e3c89b850d81" />
+
 
 ---
 
@@ -178,8 +176,8 @@ This project demonstrates practical implementation of Angular concepts including
 
 **Thanvika Gali**
 
-GitHub: https://github.com/<your-username>
+GitHub: https://github.com/Thanvika-gali
 
-LinkedIn: https://linkedin.com/in/<your-profile>
+LinkedIn: https://linkedin.com/in/gali-thanvika
 
 ---
