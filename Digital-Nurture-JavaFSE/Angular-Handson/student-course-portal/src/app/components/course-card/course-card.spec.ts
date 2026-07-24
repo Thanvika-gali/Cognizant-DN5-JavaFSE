@@ -23,7 +23,7 @@ describe('CourseCardComponent', () => {
   it('renders the input course name', () => expect(fixture.nativeElement.querySelector('h3').textContent).toContain('Data Structures'));
   it('emits the course ID when Enroll is clicked', () => {
     spyOn(component.enrollRequested, 'emit');
-    fixture.nativeElement.querySelectorAll('button')[1].click();
+    fixture.nativeElement.querySelectorAll('button')[2].click();
     expect(component.enrollRequested.emit).toHaveBeenCalledWith(1);
   });
   it('logs the previous and current course in ngOnChanges', () => {
@@ -34,6 +34,6 @@ describe('CourseCardComponent', () => {
   it('shows Unenroll for an enrolled course', () => {
     store.setState({ enrollment: { enrolledCourseIds: [1] } });
     fixture.detectChanges();
-    expect(fixture.nativeElement.querySelectorAll('button')[1].textContent).toContain('Unenroll');
+    expect(fixture.nativeElement.querySelectorAll('button')[2].textContent).toContain('Unenroll');
   });
 });

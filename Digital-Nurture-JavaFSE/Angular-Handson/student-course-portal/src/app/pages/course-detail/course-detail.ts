@@ -1,2 +1,28 @@
-import { Component, OnInit } from '@angular/core'; import { CommonModule } from '@angular/common'; import { ActivatedRoute } from '@angular/router'; import { Course } from '../../models/course.model'; import { CourseService } from '../../services/course.service';
-@Component({ selector: 'app-course-detail', standalone: true, imports: [CommonModule], template: '<h1>Course Detail</h1><p *ngIf="course">{{ course.name }} ({{ course.code }})</p>' }) export class CourseDetailComponent implements OnInit { course?: Course; constructor(private readonly route: ActivatedRoute, private readonly courseService: CourseService) {} ngOnInit(): void { const id = Number(this.route.snapshot.paramMap.get('id')); this.courseService.getCourseById(id).subscribe(course => this.course = course); } }
+
+import { Component, OnDestroy, inject } from '@angular/core';
+import { CommonModule, AsyncPipe } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap, map } from 'rxjs';
+import { CourseService } from '../../services/course.service';
+import { CreditLabelPipe } from '../../pipes/credit-label-pipe';
+
+@Component({
+  selector: 'app-course-detail',
+  standalone: true,
+  imports: [CommonModule, AsyncPipe, CreditLabelPipe],
+  templateUrl: './course-detail.html',
+  styleUrl: './course-detail.css'
+})
+export class CourseDetail implements OnDestroy {
+  private readonly route = inject(ActivatedRoute);
+  private readonly courseService = inject(CourseService);
+
+  readonly course$ = this.route.paramMap.pipe(
+    map(p => Number(p.get('id'))),
+    switchMap(id => this.courseService.getCourseById(id))
+  );
+
+  ngOnDestroy(): void {
+    console.log('CourseDetail destroyed');
+  }
+}

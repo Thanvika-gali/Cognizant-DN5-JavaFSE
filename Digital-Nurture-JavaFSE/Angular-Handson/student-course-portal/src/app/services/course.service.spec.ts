@@ -29,4 +29,16 @@ describe('CourseService', () => {
       httpMock.expectOne('http://localhost:3000/courses').flush('Server error', { status: 500, statusText: 'Server Error' });
     }
   });
+
+  it('sends POST, PUT and DELETE requests for course changes', () => {
+    const newCourse = { name: 'Algorithms', code: 'CS202', credits: 3, gradeStatus: 'pending' as const };
+    service.createCourse(newCourse).subscribe();
+    expect(httpMock.expectOne('http://localhost:3000/courses').request.method).toBe('POST');
+
+    service.updateCourse({ id: 7, ...newCourse }).subscribe();
+    expect(httpMock.expectOne('http://localhost:3000/courses/7').request.method).toBe('PUT');
+
+    service.deleteCourse(7).subscribe();
+    expect(httpMock.expectOne('http://localhost:3000/courses/7').request.method).toBe('DELETE');
+  });
 });

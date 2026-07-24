@@ -1,13 +1,13 @@
-# StudentCoursePortal
+# Student Course Portal
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.19.
+Angular 20 hands-on project covering components, binding, directives/pipes, template-driven and reactive forms, services/DI, routing/guards, HTTP, NgRx, and Jasmine/Karma tests.
 
 ## Development server
 
 To start a local development server, run:
 
 ```bash
-ng serve
+npm start
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
@@ -31,28 +31,28 @@ ng generate --help
 To build the project run:
 
 ```bash
-ng build
+npm run build
 ```
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
 ## Running unit tests
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+To execute the Jasmine/Karma test suite, use:
 
 ```bash
-ng test
+npm test
 ```
 
-## Running end-to-end tests
+## JSON Server API
 
-For end-to-end (e2e) testing, run:
+Start this in a second terminal before using **Manage Courses**. It serves `db.json` at `http://localhost:3000`.
 
 ```bash
-ng e2e
+npm run api
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+The course manager at `/courses/manage` demonstrates HTTP GET, POST, PUT, and DELETE. The enrollment feature is lazy-loaded; navigation away from either enrollment or a dirty course form prompts for confirmation.
 
 ## Additional Resources
 

@@ -9,17 +9,26 @@ export class CourseService {
 
   constructor(private readonly http: HttpClient) {}
 
+  private normalizeCourse(course: Course & { id: string | number }): Course {
+    return {
+      ...course,
+      id: Number(course.id)
+    };
+  }
+
   getCourses(): Observable<Course[]> {
-    return this.http.get<Course[]>(this.apiUrl).pipe(
-      map(courses => courses.filter(course => course.credits > 0)),
-      tap(courses => console.log('Courses loaded:', courses.length)), // tap is for side effects; map transforms data.
+    return this.http.get<(Course & { id: string | number })[]>(this.apiUrl).pipe(
+      map(courses => courses.map(course => this.normalizeCourse(course)).filter(course => course.credits > 0)),
+      tap(courses => console.log('Courses loaded:', courses.length)),
       retry(2),
       catchError(() => throwError(() => new Error('Failed to load courses. Please try again.')))
     );
   }
 
   getCourseById(id: number): Observable<Course> {
-    return this.http.get<Course>(`${this.apiUrl}/${id}`);
+    return this.http.get<Course & { id: string | number }>(`${this.apiUrl}/${id}`).pipe(
+      map(course => this.normalizeCourse(course))
+    );
   }
 
   createCourse(course: Omit<Course, 'id'>): Observable<Course> { return this.http.post<Course>(this.apiUrl, course); }
