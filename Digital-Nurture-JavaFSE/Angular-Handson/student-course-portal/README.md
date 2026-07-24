@@ -106,13 +106,13 @@ http://localhost:4200
 
 ### Home
 
-![Home](screenshots/home.png)
+<img width="1883" height="870" alt="image" src="https://github.com/user-attachments/assets/9dc7739a-903a-4352-add9-4a12b8a01f0d" />
 
 ---
 
 ### Course List
 
-![Courses](screenshots/courses.png)
+<img width="1915" height="782" alt="image" src="https://github.com/user-attachments/assets/093f622c-df63-427d-ae17-8a344bfe8e7e" />
 
 ---
 
