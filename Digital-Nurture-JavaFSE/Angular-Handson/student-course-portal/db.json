@@ -1,13 +1,6 @@
 {
   "courses": [
     {
-      "name": "Angular",
-      "code": "NG201",
-      "credits": 3,
-      "gradeStatus": "passed",
-      "id": "2"
-    },
-    {
       "name": "Database Management",
       "code": "DB301",
       "credits": 4,
