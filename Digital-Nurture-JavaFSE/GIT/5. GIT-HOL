@@ -1,0 +1,46 @@
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\5.GIT_HOL\GitDemo> git status
+
+>> git branch -a
+>> git pull origin master
+>> git push origin master
+>> git log --oneline
+>> git status
+>>
+
+On branch master
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        GitDemo/
+        hello.xml.orig
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+* master
+  remotes/origin/master
+
+From https://github.com/Thanvika-gali/Cognizant-DN5-JavaFSE
+ * branch            master     -> FETCH_HEAD
+
+Already up to date.
+
+Everything up-to-date
+
+396f33d (HEAD -> master, origin/master) Resolve merge conflict in hello.xml and update .gitignore
+e0a50f2 Add hello.xml on master branch
+acbbefd Add hello.xml on GitWork branch
+fe480c3 Added welcome.txt on GitNewBranch
+927da78 Added welcome.txt to repository
+
+On branch master
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        GitDemo/
+        hello.xml.orig
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\5.GIT_HOL\GitDemo>
