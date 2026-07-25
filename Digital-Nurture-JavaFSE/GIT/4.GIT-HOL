@@ -1,0 +1,117 @@
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo> git status
+
+>> git checkout -b GitWork
+>> echo "<xml>GitWork branch changes</xml>" > hello.xml
+>> git add hello.xml
+>> git commit -m "Add hello.xml on GitWork branch"
+>> git checkout master
+>> echo "<xml>Master trunk changes</xml>" > hello.xml
+>> git add hello.xml
+>> git commit -m "Add hello.xml on master branch"
+>> git log --oneline --graph --decorate --all
+>>
+
+On branch master
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        GitDemo/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+Switched to a new branch 'GitWork'
+
+[GitWork acbbefd] Add hello.xml on GitWork branch
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 hello.xml
+
+Switched to branch 'master'
+
+[master e0a50f2] Add hello.xml on master branch
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ create mode 100644 hello.xml
+
+* e0a50f2 (HEAD -> master) Add hello.xml on master branch
+| * acbbefd (GitWork) Add hello.xml on GitWork branch
+|/
+* fe480c3 Added welcome.txt on GitNewBranch
+* 927da78 Added welcome.txt to repository
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo> git diff master..GitWork
+
+>> git difftool master..GitWork
+>>
+
+diff --git a/hello.xml b/hello.xml
+index 7f7cd6a..3e948dc 100644
+Binary files a/hello.xml and b/hello.xml differ
+
+This message is displayed because 'diff.tool' is not configured.
+See 'git difftool --tool-help' or 'git help config' for more details.
+'git difftool' will now attempt to use one of the following tools:
+kompare emerge vimdiff nvimdiff
+
+Viewing (1/1): 'hello.xml'
+Launch 'vimdiff' [Y/n]? n
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo> git merge GitWork
+
+>>
+
+warning: Cannot merge binary files: hello.xml (HEAD vs. GitWork)
+Auto-merging hello.xml
+CONFLICT (add/add): Merge conflict in hello.xml
+Automatic merge failed; fix conflicts and then commit the result.
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo> git mergetool
+
+>>
+
+This message is displayed because 'merge.tool' is not configured.
+See 'git mergetool --tool-help' or 'git help config' for more details.
+'git mergetool' will now attempt to use one of the following tools:
+tortoisemerge emerge vimdiff nvimdiff
+
+Merging:
+hello.xml
+
+Normal merge conflict for 'hello.xml':
+  {local}: created file
+  {remote}: created file
+
+Hit return to start merge resolution tool (vimdiff):
+3 files to edit
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo> git merge GitWork
+
+fatal: You have not concluded your merge (MERGE_HEAD exists).
+Please, commit your changes before you merge.
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo> git add hello.xml
+
+>> echo "*.orig" >> .gitignore
+>> echo "*.bak" >> .gitignore
+>> git add .gitignore
+>> git commit -m "Resolve merge conflict in hello.xml and update .gitignore"
+>> git branch -a
+>> git branch -d GitWork
+>> git log --oneline --graph --decorate
+>>
+
+[master 396f33d] Resolve merge conflict in hello.xml and update .gitignore
+
+  GitWork
+* master
+
+Deleted branch GitWork (was acbbefd).
+
+* 396f33d (HEAD -> master) Resolve merge conflict in hello.xml and update .gitignore
+|\
+| * acbbefd Add hello.xml on GitWork branch
+* | e0a50f2 Add hello.xml on master branch
+|/
+* fe480c3 Added welcome.txt on GitNewBranch
+* 927da78 Added welcome.txt to repository
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\4.GIT_HOL\GitDemo>
