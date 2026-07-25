@@ -61,10 +61,6 @@ git init
 ls -la
 ```
 
-### Output
-
-<img width="1545" height="830" alt="Screenshot 2026-07-25 125110" src="https://github.com/user-attachments/assets/c80aa47e-ba32-4ac9-8c54-e5a39a1257c3" />
-
 
 ---
 
@@ -79,9 +75,7 @@ cat welcome.txt
 
 ### Output
 
-> *(Insert Screenshot 5 Here)*
-
-![Welcome File](05-welcome-file.png)
+<img width="1013" height="497" alt="Screenshot 2026-07-25 125053" src="https://github.com/user-attachments/assets/0fe81348-817a-400d-bfe5-024316ca387d" />
 
 ---
 
@@ -112,9 +106,8 @@ git status
 
 ### Output
 
-> *(Insert Screenshot 7 Here)*
+<img width="1861" height="655" alt="Screenshot 2026-07-25 125102" src="https://github.com/user-attachments/assets/d009ef0c-2e99-4c8c-8e9e-2e2cef81cc89" />
 
-![Git Add](07-git-add.png)
 
 ---
 
@@ -125,12 +118,6 @@ git status
 ```bash
 git commit -m "Initial Commit"
 ```
-
-### Output
-
-> *(Insert Screenshot 8 Here)*
-
-![Git Commit](08-git-commit.png)
 
 ---
 
@@ -144,9 +131,8 @@ git status
 
 ### Output
 
-> *(Insert Screenshot 9 Here)*
+<img width="1545" height="830" alt="Screenshot 2026-07-25 125110" src="https://github.com/user-attachments/assets/c6c72a31-5334-42fa-8b91-6b99d019d725" />
 
-![Working Tree Clean](09-working-tree-clean.png)
 
 ---
 
