@@ -1,1 +1,79 @@
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\1.GIT_HOL> git --version
 
+>> git config --global user.name "Thanvika"
+>> git config --global user.email "thanvikagali28@gmail.com"
+>> git config --global --list
+>>
+
+git version 2.52.0.windows.1
+user.name=Thanvika
+user.email=thanvikagali28@gmail.com
+credential.https://huggingface.co.provider=generic
+core.editor=notepad++.exe -multiInst -notabbar -nosession -noPlugin
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\1.GIT_HOL> git config --global core.editor "notepad++.exe -multiInst -notabbar -nosession -noPlugin"
+
+>> git init GitDemo
+>> cd GitDemo
+>>
+
+hint: Using 'master' as the name for the initial branch. This default branch name
+hint: is subject to change. To configure the initial branch name to use in all
+hint: of your new repositories, call:
+
+hint:     git config --global init.defaultBranch <name>
+
+hint:
+
+hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+hint: 'development'. The just-created branch can be renamed via this command:
+
+hint:     git branch -m <name>
+
+hint: Disable this message with "git config set advice.defaultBranchName false"
+
+Initialized empty Git repository in E:/projects/Cognizant-DN5-JavaFSE/Digital-Nurture-JavaFSE/GIT/1.GIT_HOL/GitDemo/.git/
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\1.GIT_HOL\GitDemo> echo "Welcome to Git" > welcome.txt
+
+>> git status
+>> git add welcome.txt
+>> git commit -m "Added welcome.txt to repository"
+>> git status
+>>
+
+On branch master
+
+No commits yet
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        welcome.txt
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+[master (root-commit) 4750d71] Added welcome.txt to repository
+1 file changed, 1 insertion(+), 0 deletions(-)
+create mode 100644 welcome.txt
+
+On branch master
+nothing to commit, working tree clean
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\1.GIT_HOL\GitDemo> git remote add origin https://github.com/Thanvika-gali/Cognizant-DN5-JavaFSE.git
+
+>> git push -u origin master
+>>
+
+info: please complete authentication in your browser...
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 267 bytes | 133.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0 (from 0)
+
+To https://github.com/Thanvika-gali/Cognizant-DN5-JavaFSE.git
+ * [new branch]      master -> master
+
+branch 'master' set up to track 'origin/master'.
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\1.GIT_HOL\GitDemo>
