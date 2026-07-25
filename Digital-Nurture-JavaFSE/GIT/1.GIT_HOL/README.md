@@ -87,12 +87,6 @@ cat welcome.txt
 git status
 ```
 
-### Output
-
-> *(Insert Screenshot 6 Here)*
-
-![Git Status](06-git-status.png)
-
 ---
 
 # Step 7: Stage the File
