@@ -48,9 +48,8 @@ git init
 
 ### Output
 
-> *(Insert Screenshot 3 Here)*
+<img width="1312" height="451" alt="Screenshot 2026-07-25 124707" src="https://github.com/user-attachments/assets/4981cde6-5bc4-40ae-87c4-13f13fa0e9ff" />
 
-![Git Init](03-git-init.png)
 
 ---
 
@@ -64,9 +63,8 @@ ls -la
 
 ### Output
 
-> *(Insert Screenshot 4 Here)*
+<img width="1545" height="830" alt="Screenshot 2026-07-25 125110" src="https://github.com/user-attachments/assets/c80aa47e-ba32-4ac9-8c54-e5a39a1257c3" />
 
-![Repository Verification](04-ls.png)
 
 ---
 
