@@ -1,0 +1,72 @@
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\2.GIT_HOL\GitDemo> echo "" > app.log
+
+>> mkdir log
+>> echo "debug info" > log/debug.log
+>> echo "*.log" > .gitignore
+>> echo "log/" >> .gitignore
+
+    Directory: E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\2.GIT_HOL\GitDemo
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d-----        7/25/2026     6:23 AM               log
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\2.GIT_HOL\GitDemo> git status
+
+>> git add .gitignore
+>> git commit -m "Add .gitignore to ignore log files and log folders"
+>> git status
+>>
+
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        app.log
+        log/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+[master ba60065] Add .gitignore to ignore log files and log folders
+1 file changed, 0 insertions(+), 0 deletions(-)
+create mode 100644 .gitignore
+
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+Untracked files:
+
+On branch master
+Your branch is up to date with 'origin/master'.
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+
+        .gitignore
+        app.log
+        log/
+
+nothing added to commit but untracked files present (use "git add" to track)
+
+[master ba60065] Add .gitignore to ignore log files and log folders
+1 file changed, 0 insertions(+), 0 deletions(-)
+create mode 100644 .gitignore
+
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+PS E:\projects\Cognizant-DN5-JavaFSE\Digital-Nurture-JavaFSE\GIT\2.GIT_HOL\GitDemo>
+
+
+.gitignore
+# Ignore log files (all .log extensions)
+*.log
+
+# Ignore log directories
+log/
+logs/
